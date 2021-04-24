@@ -4,8 +4,8 @@ This is a console application running some jobs in parallel.
 
 There are 2 types of jobs currently: 
 
-           o counting even numbers
-           o counting odd numbers 
+           counting even numbers
+           counting odd numbers 
   
 Counting is performed with 2 secs interval and the current numbers for each jobs are displayed on the console.
 
@@ -17,13 +17,13 @@ After a valid number is provided, user is asked to enter commands.
 "Please enter your command: "
 Valid commands are:
 
-           o status – returns ids and status of all registered jobs.
+           status – returns ids and status of all registered jobs.
                       The job status can be one of the following: idle/running/paused/aborted
-           o start <id> - starts job with the given id
-           o abort <id> - aborts execution of a job with the given id
-           o pause <id> - halts execution of a job with the given id
-           o resume <id> - resumes execution of a halted job
-           o quit – aborts all running jobs and quits the application
+           start <id> - starts job with the given id
+           abort <id> - aborts execution of a job with the given id
+           pause <id> - halts execution of a job with the given id
+           resume <id> - resumes execution of a halted job
+           quit – aborts all running jobs and quits the application
   
 User is asked to enter a command until a valid command is provided in a valid format.
 Notice that commands except 'status' and 'quit' requires valid job id's.
