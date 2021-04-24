@@ -55,9 +55,13 @@ int main()
 
             cout << "Try again with a valid command!" << endl;
         }
-        else
+        else if (task_manager.checkCommand(command))
         {
             execute_commands = task_manager.executeCommand(command);
+        }
+        else
+        {
+            cout << command << "is not a valid command!" << endl;
         }
     }
 

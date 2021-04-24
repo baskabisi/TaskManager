@@ -19,8 +19,14 @@ class AnyWorker
 {
 public:
 
+    /**
+     * @brief Destructor
+     */
     virtual ~AnyWorker(void) {}
 
+    /**
+     * @brief To be implemented by derived classes in order to execute the tasks in parallel.
+     */
     virtual void operator()() = 0;
 };
 

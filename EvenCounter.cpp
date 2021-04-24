@@ -11,7 +11,7 @@
 using namespace std;
 
 EvenCounter::EvenCounter()
-: m_count(0)
+: m_current_number(0)
 {
 }
 
@@ -24,10 +24,10 @@ EvenCounter::operator()()
 void
 EvenCounter::count()
 {
-    cout << "Starting to count even numbers..." <<  endl;
+    //cout <<  endl << "Even counter started counting..." <<  endl;
     while (1)
     {
-        //cout << "Counting even numbers: " << m_count << endl;
-        m_count += 2;
+        //cout << "Even counter is counting: " << m_current_number << endl;
+        m_current_number += 2;
     }
 }

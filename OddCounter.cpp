@@ -11,7 +11,7 @@
 using namespace std;
 
 OddCounter::OddCounter()
-: m_count(1)
+: m_current_number(1)
 {
 }
 
@@ -24,12 +24,10 @@ OddCounter::operator()()
 void
 OddCounter::count()
 {
-    cout << "Starting to count odd numbers..." <<  endl;
+    //cout <<  endl << "Odd counter started counting..." <<  endl;
     while (1)
     {
-        //cout << "Counting odd numbers: " << m_count << endl;
-        m_count += 2;
+        //cout << "Odd counter is counting: " << m_current_number << endl;
+        m_current_number += 2;
     }
 }
-
-

@@ -14,10 +14,19 @@ class AnyCounter: public AnyWorker
 {
 public:
 
+    /**
+     * @brief Destructor
+     */
     virtual ~AnyCounter(void) {}
 
+    /**
+     * @brief To be implemented by derived classes in order to execute the tasks in parallel.
+     */
     virtual void operator()(){count();};
 
+    /**
+     * @brief To be implemented by derived classes in order to perform a count task.
+     */
     virtual void count() = 0;
 
 };

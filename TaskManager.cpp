@@ -12,42 +12,16 @@
 #include "OddCounter.hpp"
 
 
-/*
-class EvenCounter
-{
-public:
-    void operator()()
-    {
-        int count = 0;
-        cout << "Starting to count even numbers..." <<  endl;
-        while (1)
-        {
-            cout << "Counting even numbers: " << count << endl;
-            count += 2;
-        }
-    }
-};
-
-class OddCounter
-{
-public:
-    void operator()()
-    {
-        int count = 1;
-        cout << "Starting to count odd numbers..." <<  endl;
-        while (1)
-        {
-            cout << "Counting odd numbers: " << count << endl;
-            count += 2;
-        }
-    }
-};
-*/
-
+const std::string command_status("status");
+const std::string command_start("start");
+const std::string command_abort("abort");
+const std::string command_pause("pause");
+const std::string command_resume("resume");
+const std::string command_quit("quit");
 
 TaskManager::TaskManager()
 : m_number_of_tasks(0),
-  m_next_task(task_version_1)
+  m_next_task(count_even)
 {
 }
 
@@ -76,49 +50,9 @@ TaskManager::registerTasks()
     {
         taskInfo task;
         task.status = idle;
-        if (getNextTaskVersion() == task_version_1)
-        {
-/*
-            std::function<void()> func_v1 = []() {
-                                //Do Some Important Work
-                                // .....
-                                //Print Thread ID
-                                std::cout << "1 From Thread ID : "<<std::this_thread::get_id() << "\n";
-                                };
+        task.type = getNextTaskVersion();
 
-            std::thread task_v1((Thread1()));
-            task_v1.join();
-            task.task_thread = std::move(task_v1);
-
-            //task.func = std::function<std::bind(&TimeConsumingTaskV1::execute)()>;
-            task.thread_id = task_v1.get_id();
-            */
-            //task.worker = new EvenCounter();
-        }
-        else if (getNextTaskVersion() == task_version_2)
-        {
-/*
-            std::function<void()> func_v2 = []() {
-                                //Do Some Important Work
-                                // .....
-                                //Print Thread ID
-                                std::cout << "2 From Thread ID : "<<std::this_thread::get_id() << "\n";
-                                };
-            std::thread task_v2((Thread2()));
-            task_v2.join();
-            task.task_thread = std::move(task_v2);
-
-            //task.func = std::function<std::bind(&TimeConsumingTaskV2::execute)()>;
-            task.thread_id = task_v2.get_id();
-            */
-
-            //task.worker = new OddCounter();
-        }
-
-        task.version = getNextTaskVersion();
         m_tasks.insert(std::pair<unsigned int, taskInfo>(i , task));
-
-        //m_tasks.insert(std::pair<unsigned int, taskInfo>(i, task));
     }
 
     return false;
@@ -127,12 +61,6 @@ TaskManager::registerTasks()
 bool
 TaskManager::executeCommand(const std::string& command)
 {
-    const std::string command_status("status");
-    const std::string command_start("start");
-    const std::string command_abort("abort");
-    const std::string command_pause("pause");
-    const std::string command_resume("resume");
-    const std::string command_quit("quit");
 
     if (command.compare(command_quit) == 0)
     {
@@ -144,7 +72,7 @@ TaskManager::executeCommand(const std::string& command)
     {
         for (auto& item: m_tasks)
         {
-            cout << "Job id: " << item.first << " status: " << getStatus(item.second.status) <<  endl;
+            cout << "Job id: " << item.first << " | Job type: " << getType(item.second.type) << " | Status: " << getStatus(item.second.status) << endl;
         }
     }
     else
@@ -200,6 +128,21 @@ TaskManager::executeCommand(const std::string& command)
     return true;
 }
 
+enum taskType
+TaskManager::getNextTaskVersion()
+{
+    if (m_next_task == count_even)
+    {
+        m_next_task = count_odd;
+    }
+    else if (m_next_task == count_odd)
+    {
+        m_next_task = count_even;
+    }
+
+    return m_next_task;
+}
+
 const std::string
 TaskManager::getStatus(enum taskStatus status) const
 {
@@ -222,32 +165,38 @@ TaskManager::getStatus(enum taskStatus status) const
     }
 }
 
-/*
-void
-TaskManager::threadFunction(int version)
+const std::string
+TaskManager::getType(enum taskType type) const
 {
-    int count = 0;
-    if (version == 0)
+    const std::string even_counter("Even Counter");
+    const std::string odd_counter("Odd Counter");
+
+    switch (type)
     {
-        cout << "Starting to count even numbers..." <<  endl;
-        //while (1)
-        {
-            cout << "Counting even numbers: " << count << endl;
-            count += 2;
-        }
-    }
-    else
-    {
-        count = 1;
-        cout << "Starting to count odd numbers..." <<  endl;
-        //while (1)
-        {
-            cout << "Counting odd numbers: " << count << endl;
-            count += 2;
-        }
+        case count_even:
+            return even_counter;
+        case count_odd:
+            return odd_counter;
     }
 }
-*/
+
+bool
+TaskManager::checkCommand(const std::string command) const
+{
+    bool valid_command = false;
+
+    if (((command.compare(command_status) == 0)) ||
+        ((command.compare(command_start) == 0))  ||
+        ((command.compare(command_abort) == 0))  ||
+        ((command.compare(command_pause) == 0))  ||
+        ((command.compare(command_resume) == 0))  ||
+        ((command.compare(command_quit) == 0)))
+    {
+        valid_command = true;
+    }
+
+    return valid_command;
+}
 
 bool
 TaskManager::startTask(unsigned int id)
@@ -257,25 +206,15 @@ TaskManager::startTask(unsigned int id)
     {
         if (it->second.status == idle)
         {
-            /*
-            AnyWorker* worker = it->second.worker;
-            if (worker)
-            {
-                worker->executeInBackground();
-            }
-            */
-            if (it->second.version == task_version_1)
+            if (it->second.type == count_even)
             {
                 m_workers.insert(std::pair<unsigned int, std::thread>(it->first, std::thread((EvenCounter()))));
-                //worker.join();
             }
-            else if (it->second.version == task_version_2)
+            else if (it->second.type == count_odd)
             {
                 m_workers.insert(std::pair<unsigned int, std::thread>(it->first, std::thread((OddCounter()))));
-                //worker.join();
             }
             it->second.status = running;
-            //cout << "Job #" << id << " started. Thread id: " <<  worker_thread.get_id() << endl;
         }
         else
         {
@@ -295,6 +234,11 @@ TaskManager::abortTask(unsigned int id)
         if (it->second.status != aborted)
         {
             it->second.status = aborted;
+            auto it = m_workers.find(id);
+            if (it != m_workers.end())
+            {
+                // abort thread
+            }
             cout << "Job #" << id << " aborted." <<  endl;
         }
         else
@@ -351,19 +295,4 @@ TaskManager::quit()
 {
     cout << "Aborting all tasks and leaving." <<  endl;
     return false;
-}
-
-enum taskVersion
-TaskManager::getNextTaskVersion()
-{
-    if (m_next_task == task_version_1)
-    {
-        m_next_task = task_version_2;
-    }
-    else if (m_next_task == task_version_2)
-    {
-        m_next_task = task_version_1;
-    }
-
-    return m_next_task;
 }

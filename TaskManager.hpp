@@ -21,7 +21,7 @@
 
 using namespace std;
 
-#define MAX_NUM_JOBS 100 // Consider setting this value according to sth meaningful
+#define MAX_NUM_JOBS std::thread::hardware_concurrency()
 
 
 enum taskStatus
@@ -32,37 +32,64 @@ enum taskStatus
     aborted
 };
 
-enum taskVersion
+enum taskType
 {
-    task_version_1,
-    task_version_2
+    count_even,
+    count_odd
 };
 
 struct taskInfo
 {
     taskStatus status;
-    //std::thread::id thread_id;
-    //std::function<void()> func;
-    //std::thread task_thread;
-    //AnyWorker* worker;
-    taskVersion version;
+    taskType type;
 };
 
 class TaskManager
 {
 public:
+
+    /**
+     * @brief Constructor
+     */
     TaskManager();
 
+    /**
+     * @brief Sets number of tasks to be managed.
+     * @see getMaxNumberOfTasks()
+     */
     bool setNumberOfTasks(unsigned int number_of_tasks);
+
+    /**
+     * @brief Gets the max number of tasks
+     */
     unsigned int getMaxNumberOfTasks() const;
+
+    /**
+     * @brief Creates tasks and assign jobs
+     */
     bool registerTasks();
+
+    /**
+     * @brief Checks if provided command is valid
+     * @param command Command to be checked
+     */
+    bool checkCommand(const std::string command) const;
+
+    /**
+     * @brief Executes commands provided
+     * @see checkCommand()
+     * @param command Command to be executed
+     */
     bool executeCommand(const std::string& command);
 
 private:
-    void threadFunction(int version);
-    enum taskVersion getNextTaskVersion();
+
+    TaskManager(TaskManager const &) = delete;
+    TaskManager& operator =(const TaskManager&) = delete;
+
+    enum taskType getNextTaskVersion();
     const std::string getStatus(enum taskStatus status) const;
-    bool checkCommand() const;
+    const std::string getType(enum taskType type) const;
 
     // Commands
     bool startTask(unsigned int id);
@@ -74,7 +101,7 @@ private:
     unsigned int m_number_of_tasks;
     std::map<unsigned int, taskInfo> m_tasks;
     std::map<unsigned int, std::thread> m_workers;
-    enum taskVersion m_next_task;
+    enum taskType m_next_task;
 };
 
 
