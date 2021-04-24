@@ -27,7 +27,7 @@ EvenCounter::count()
 {
     while (1)
     {
-        cout << endl << "Job #" << m_id << " | Even counter is counting: " << m_current_number << endl;
+        cout << endl << "Job #" << m_id << "| Even counter is counting: " << m_current_number << endl;
         m_current_number += 2;
         std::this_thread::sleep_for(std::chrono::seconds(2));
     }
