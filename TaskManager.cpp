@@ -72,10 +72,14 @@ TaskManager::executeCommand(const std::string& command)
     }
     else if (command.compare(command_status) == 0)
     {
+        cout << endl << "******************************** STATUS ********************************" << endl;
+
         for (auto& item: m_tasks)
         {
-            cout << "Job id: " << item->id() << " | Job type: " << getType(item->type()) << " | Status: " << getStatus(item->status()) << endl;
+            cout << "* Job id: " << item->id() << " | Job type: " << getType(item->type()) << " | Status: " << getStatus(item->status()) << endl;
         }
+
+        cout << "************************************************************************" << endl;
     }
     else
     {
@@ -211,7 +215,6 @@ TaskManager::abortTask(unsigned int id)
         (m_tasks[id]->status() != TaskStatus::ABORTED))
     {
         m_tasks[id]->abort();
-        cout << "Job #" << id << " aborted." <<  endl;
     }
     else
     {
@@ -228,8 +231,6 @@ TaskManager::pauseTask(unsigned int id)
         (m_tasks[id]->status() == TaskStatus::RUNNING))
     {
         m_tasks[id]->pause();
-
-        cout << "Job #" << id << " paused." <<  endl;
     }
     else
     {
@@ -246,7 +247,6 @@ TaskManager::resumeTask(unsigned int id)
         (m_tasks[id]->status() == TaskStatus::PAUSED))
     {
         m_tasks[id]->resume();
-        cout << "Job #" << id << " resumed." <<  endl;
     }
     else
     {

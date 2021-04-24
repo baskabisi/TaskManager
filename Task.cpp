@@ -64,6 +64,7 @@ Task::pause()
     {
         m_status = TaskStatus::PAUSED;
     }
+    cout << "Job #" << m_id << " aborted." <<  endl;
 }
 
 void

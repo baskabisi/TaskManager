@@ -17,11 +17,11 @@ int main()
     {
        if (number_of_jobs > task_manager.getMaxNumberOfTasks())
        {
-           cout << "Max number of jobs to run is " << task_manager.getMaxNumberOfTasks() << ", please enter another number: ";
+           cout << "> Max number of jobs to run is " << task_manager.getMaxNumberOfTasks() << ", please enter another number: ";
        }
        else
        {
-           cout << "Please enter number of jobs to run: ";
+           cout << "> Please enter number of jobs to run: ";
        }
        cin >> number_of_jobs;
 
@@ -30,7 +30,7 @@ int main()
            cin.clear();
            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-           cout << "Try again with a valid number!" << endl;
+           cout << "> Try again with a valid number!" << endl;
        }
        else
        {
@@ -45,7 +45,7 @@ int main()
     bool execute_commands = true;
     while (execute_commands)
     {
-        cout << "Please enter your command: ";
+        cout << "> Please enter your command: ";
         cin >> command;
 
         if (!cin)
@@ -53,7 +53,7 @@ int main()
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-            cout << "Try again with a valid command!" << endl;
+            cout << "> Try again with a valid command!" << endl;
         }
         else if (task_manager.checkCommand(command))
         {
@@ -61,7 +61,7 @@ int main()
         }
         else
         {
-            cout << command << "is not a valid command!" << endl;
+            cout << "> " << command << "is not a valid command!" << endl;
         }
     }
 

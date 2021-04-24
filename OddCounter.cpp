@@ -25,12 +25,9 @@ OddCounter::operator()()
 void
 OddCounter::count()
 {
-    //while (1)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 
-        cout << endl << "Job #" << m_id << "| Odd counter is counting: " << m_current_number << endl;
-        m_current_number += 2;
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
+    cout << endl << "    Job #" << m_id << "| Odd counter is counting: " << m_current_number << endl;
+    m_current_number += 2;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 }
