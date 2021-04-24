@@ -25,6 +25,11 @@ public:
     virtual void operator()(){count();};
 
     /**
+     * @brief Implemented in order to execute the counting task in parallel.
+     */
+    void execute(){count();};
+
+    /**
      * @brief To be implemented by derived classes in order to perform a count task.
      */
     virtual void count() = 0;

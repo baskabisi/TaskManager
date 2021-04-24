@@ -20,7 +20,7 @@ class AnyWorker
 public:
 
     virtual ~AnyWorker(void) {}
-    void executeInBackground() { join(); m_worker_thread = std::thread(&AnyWorker::execute, std::ref(*this)); }
+    void executeInBackground() { join(); m_worker_thread = std::thread(&AnyWorker::execute, std::ref(*is)); }
 
 protected:
 

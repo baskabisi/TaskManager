@@ -10,6 +10,7 @@
 #include "AnyWorker.hpp"
 #include "EvenCounter.hpp"
 #include "OddCounter.hpp"
+#include "TaskStatus.hpp"
 
 
 const std::string command_status("status");
@@ -23,6 +24,11 @@ TaskManager::TaskManager()
 : m_number_of_tasks(),
   m_next_task(count_even)
 {
+}
+
+TaskManager::~TaskManager()
+{
+    m_tasks.clear();
 }
 
 bool
@@ -48,11 +54,8 @@ TaskManager::registerTasks()
 {
     for (unsigned int i = 0; i < m_number_of_tasks; i++ )
     {
-        taskInfo task;
-        task.status = idle;
-        task.type = getNextTaskVersion();
-
-        m_tasks.insert(std::pair<unsigned int, taskInfo>(i , task));
+        auto ret = std::make_unique<Task>(i);
+        m_tasks.push_back(std::move(ret));
     }
 
     return false;
@@ -61,7 +64,6 @@ TaskManager::registerTasks()
 bool
 TaskManager::executeCommand(const std::string& command)
 {
-
     if (command.compare(command_quit) == 0)
     {
         quit();
@@ -72,7 +74,7 @@ TaskManager::executeCommand(const std::string& command)
     {
         for (auto& item: m_tasks)
         {
-            cout << "Job id: " << item.first << " | Job type: " << getType(item.second.type) << " | Status: " << getStatus(item.second.status) << endl;
+            cout << "Job id: " << item->id() << " | Job type: " << getType(item->type()) << " | Status: " << getStatus(item->status()) << endl;
         }
     }
     else
@@ -128,45 +130,33 @@ TaskManager::executeCommand(const std::string& command)
     return true;
 }
 
-enum taskType
-TaskManager::getNextTaskVersion()
-{
-    if (m_next_task == count_even)
-    {
-        m_next_task = count_odd;
-    }
-    else if (m_next_task == count_odd)
-    {
-        m_next_task = count_even;
-    }
-
-    return m_next_task;
-}
-
 const std::string
-TaskManager::getStatus(enum taskStatus status) const
+TaskManager::getStatus(enum TaskStatus status) const
 {
     const std::string status_idle("Idle");
     const std::string status_running("Running");
     const std::string status_paused("Paused");
     const std::string status_aborted("Aborted");
+    const std::string status_unknown("Unknown");
 
     switch (status)
     {
-        case running:
+        case TaskStatus::RUNNING:
             return status_running;
-        case paused:
+        case TaskStatus::PAUSED:
             return status_paused;
-        case aborted:
+        case TaskStatus::ABORTED:
             return status_aborted;
-        case idle:
-        default:
+        case TaskStatus::IDLE:
             return status_idle;
+        case TaskStatus::UNKNOWN:
+        default:
+            return status_unknown;
     }
 }
 
 const std::string
-TaskManager::getType(enum taskType type) const
+TaskManager::getType(enum TaskType type) const
 {
     const std::string even_counter("Even Counter");
     const std::string odd_counter("Odd Counter");
@@ -201,25 +191,14 @@ TaskManager::checkCommand(const std::string command) const
 bool
 TaskManager::startTask(unsigned int id)
 {
-    auto it = m_tasks.find(id);
-    if (it != m_tasks.end())
+    if ((m_tasks.size() > id) &&
+        (m_tasks[id]->status() == TaskStatus::IDLE))
     {
-        if (it->second.status == idle)
-        {
-            if (it->second.type == count_even)
-            {
-                m_workers.insert(std::pair<unsigned int, std::thread>(it->first, std::thread((EvenCounter(id)))));
-            }
-            else if (it->second.type == count_odd)
-            {
-                m_workers.insert(std::pair<unsigned int, std::thread>(it->first, std::thread((OddCounter(id)))));
-            }
-            it->second.status = running;
-        }
-        else
-        {
-            cout << "Job #" << id << " is not idle." <<  endl;
-        }
+        m_tasks[id]->start();
+    }
+    else
+    {
+        cout << "Job #" << id << " is not idle." <<  endl;
     }
 
     return false;
@@ -228,24 +207,15 @@ TaskManager::startTask(unsigned int id)
 bool
 TaskManager::abortTask(unsigned int id)
 {
-    auto it = m_tasks.find(id);
-    if (it != m_tasks.end())
+    if ((m_tasks.size() > id) &&
+        (m_tasks[id]->status() != TaskStatus::ABORTED))
     {
-        if (it->second.status != aborted)
-        {
-            it->second.status = aborted;
-            auto it = m_workers.find(id);
-            if (it != m_workers.end())
-            {
-                // abort thread
-                it->second.detach();
-            }
-            cout << "Job #" << id << " aborted." <<  endl;
-        }
-        else
-        {
-            cout << "Job #" << id << " is already aborted." <<  endl;
-        }
+        m_tasks[id]->abort();
+        cout << "Job #" << id << " aborted." <<  endl;
+    }
+    else
+    {
+        cout << "Job #" << id << " is already aborted." <<  endl;
     }
 
     return false;
@@ -254,18 +224,16 @@ TaskManager::abortTask(unsigned int id)
 bool
 TaskManager::pauseTask(unsigned int id)
 {
-    auto it = m_tasks.find(id);
-    if (it != m_tasks.end())
+    if ((m_tasks.size() > id) &&
+        (m_tasks[id]->status() == TaskStatus::RUNNING))
     {
-        if (it->second.status == running)
-        {
-            it->second.status = paused;
-            cout << "Job #" << id << " paused." <<  endl;
-        }
-        else
-        {
-            cout << "Job #" << id << " was not running." <<  endl;
-        }
+        m_tasks[id]->pause();
+
+        cout << "Job #" << id << " paused." <<  endl;
+    }
+    else
+    {
+        cout << "Job #" << id << " was not running." <<  endl;
     }
 
     return false;
@@ -274,18 +242,15 @@ TaskManager::pauseTask(unsigned int id)
 bool
 TaskManager::resumeTask(unsigned int id)
 {
-    auto it = m_tasks.find(id);
-    if (it != m_tasks.end())
+    if ((m_tasks.size() > id) &&
+        (m_tasks[id]->status() == TaskStatus::PAUSED))
     {
-        if (it->second.status == paused)
-        {
-            it->second.status = running;
-            cout << "Job #" << id << " resumed." <<  endl;
-        }
-        else
-        {
-            cout << "Job #" << id << " was not paused." <<  endl;
-        }
+        m_tasks[id]->resume();
+        cout << "Job #" << id << " resumed." <<  endl;
+    }
+    else
+    {
+        cout << "Job #" << id << " was not paused." <<  endl;
     }
 
     return false;

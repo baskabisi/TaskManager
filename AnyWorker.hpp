@@ -28,6 +28,11 @@ public:
      * @brief To be implemented by derived classes in order to execute the tasks in parallel.
      */
     virtual void operator()() = 0;
+
+    /**
+     * @brief To be implemented by derived classes in order to be executed.
+     */
+    virtual void execute() = 0;
 };
 
 
