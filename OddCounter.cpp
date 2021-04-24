@@ -16,12 +16,18 @@ OddCounter::OddCounter()
 }
 
 void
+OddCounter::operator()()
+{
+    count();
+}
+
+void
 OddCounter::count()
 {
     cout << "Starting to count odd numbers..." <<  endl;
     while (1)
     {
-        cout << "Counting odd numbers: " << m_count << endl;
+        //cout << "Counting odd numbers: " << m_count << endl;
         m_count += 2;
     }
 }

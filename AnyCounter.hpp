@@ -16,7 +16,7 @@ public:
 
     virtual ~AnyCounter(void) {}
 
-    virtual void execute(){count();};
+    virtual void operator()(){count();};
 
     virtual void count() = 0;
 

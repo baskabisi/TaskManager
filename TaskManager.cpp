@@ -6,12 +6,13 @@
  */
 
 #include "TaskManager.hpp"
-/*
+
 #include "AnyWorker.hpp"
 #include "EvenCounter.hpp"
 #include "OddCounter.hpp"
-*/
 
+
+/*
 class EvenCounter
 {
 public:
@@ -21,7 +22,7 @@ public:
         cout << "Starting to count even numbers..." <<  endl;
         while (1)
         {
-            //cout << "Counting even numbers: " << count << endl;
+            cout << "Counting even numbers: " << count << endl;
             count += 2;
         }
     }
@@ -36,12 +37,12 @@ public:
         cout << "Starting to count odd numbers..." <<  endl;
         while (1)
         {
-            //cout << "Counting odd numbers: " << count << endl;
+            cout << "Counting odd numbers: " << count << endl;
             count += 2;
         }
     }
 };
-
+*/
 
 
 TaskManager::TaskManager()
@@ -265,13 +266,13 @@ TaskManager::startTask(unsigned int id)
             */
             if (it->second.version == task_version_1)
             {
-                std::thread worker((EvenCounter()));
-                worker.join();
+                m_workers.insert(std::pair<unsigned int, std::thread>(it->first, std::thread((EvenCounter()))));
+                //worker.join();
             }
             else if (it->second.version == task_version_2)
             {
-                std::thread worker((OddCounter()));
-                worker.join();
+                m_workers.insert(std::pair<unsigned int, std::thread>(it->first, std::thread((OddCounter()))));
+                //worker.join();
             }
             it->second.status = running;
             //cout << "Job #" << id << " started. Thread id: " <<  worker_thread.get_id() << endl;

@@ -18,6 +18,8 @@ public:
 
     virtual ~EvenCounter(void) {}
 
+    void operator()();
+
     void count();
 
 private:

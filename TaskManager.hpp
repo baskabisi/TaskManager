@@ -73,6 +73,7 @@ private:
 
     unsigned int m_number_of_tasks;
     std::map<unsigned int, taskInfo> m_tasks;
+    std::map<unsigned int, std::thread> m_workers;
     enum taskVersion m_next_task;
 };
 

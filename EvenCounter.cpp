@@ -16,12 +16,18 @@ EvenCounter::EvenCounter()
 }
 
 void
+EvenCounter::operator()()
+{
+    count();
+}
+
+void
 EvenCounter::count()
 {
     cout << "Starting to count even numbers..." <<  endl;
     while (1)
     {
-        cout << "Counting even numbers: " << m_count << endl;
+        //cout << "Counting even numbers: " << m_count << endl;
         m_count += 2;
     }
 }

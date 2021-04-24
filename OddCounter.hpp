@@ -19,6 +19,8 @@ public:
 
     virtual ~OddCounter(void) {}
 
+    void operator()();
+
     void count();
 
 private:
