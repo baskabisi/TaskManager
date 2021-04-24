@@ -17,7 +17,7 @@ public:
     /**
      * @brief Constructor
      */
-    EvenCounter();
+    EvenCounter(unsigned int id);
 
     /**
      * @brief Destructor
@@ -37,6 +37,7 @@ public:
 private:
 
     long long m_current_number;
+    unsigned int m_id;
 };
 
 

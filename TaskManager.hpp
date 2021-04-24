@@ -21,7 +21,7 @@
 
 using namespace std;
 
-#define MAX_NUM_JOBS std::thread::hardware_concurrency()
+#define MAX_NUM_JOBS 100 //std::thread::hardware_concurrency()
 
 
 enum taskStatus

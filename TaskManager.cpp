@@ -20,7 +20,7 @@ const std::string command_resume("resume");
 const std::string command_quit("quit");
 
 TaskManager::TaskManager()
-: m_number_of_tasks(0),
+: m_number_of_tasks(),
   m_next_task(count_even)
 {
 }
@@ -208,11 +208,11 @@ TaskManager::startTask(unsigned int id)
         {
             if (it->second.type == count_even)
             {
-                m_workers.insert(std::pair<unsigned int, std::thread>(it->first, std::thread((EvenCounter()))));
+                m_workers.insert(std::pair<unsigned int, std::thread>(it->first, std::thread((EvenCounter(id)))));
             }
             else if (it->second.type == count_odd)
             {
-                m_workers.insert(std::pair<unsigned int, std::thread>(it->first, std::thread((OddCounter()))));
+                m_workers.insert(std::pair<unsigned int, std::thread>(it->first, std::thread((OddCounter(id)))));
             }
             it->second.status = running;
         }

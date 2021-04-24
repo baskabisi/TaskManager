@@ -18,7 +18,7 @@ public:
     /**
      * @brief Constructor
      */
-    OddCounter();
+    OddCounter(unsigned int id);
 
     /**
      * @brief Destructor
@@ -38,6 +38,7 @@ public:
 private:
 
     long long m_current_number;
+    unsigned int m_id;
 };
 
 
