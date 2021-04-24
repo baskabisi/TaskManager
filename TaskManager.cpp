@@ -238,6 +238,7 @@ TaskManager::abortTask(unsigned int id)
             if (it != m_workers.end())
             {
                 // abort thread
+                it->second.detach();
             }
             cout << "Job #" << id << " aborted." <<  endl;
         }
