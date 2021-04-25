@@ -13,15 +13,15 @@
 
 enum class TaskStatus
 {
-    ///initial state before run
+    // Initial status before run
     IDLE,
-    ///task is running
+    // Task is running
     RUNNING,
-    ///task is paused
+    // Task is paused
     PAUSED,
-    ///task is aborted. can not be run again
+    // Task is aborted. can not be run again
     ABORTED,
-    ///unknown state
+    // Unknown status
     UNKNOWN
 };
 

@@ -87,18 +87,18 @@ private:
 
     std::thread m_thread;
 
-    /// Mutex for thread loop.
+    // Mutex for thread loop.
     std::mutex m_mutex;
 
-    /// Condition variable to wake up thread from pause or idle states.
+    // Condition variable to wake up thread from pause or idle states.
     std::condition_variable m_state_changed;
 
     std::unique_ptr<AnyWorker> m_worker;
 
-    /// Thread state.
+    // Thread state.
     std::atomic<TaskStatus> m_status;
 
-    /// Thread ID.
+    // Thread ID.
     unsigned int m_id;
 };
 
