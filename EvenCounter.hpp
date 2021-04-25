@@ -5,8 +5,8 @@
  *      Author: sukran
  */
 
-#ifndef TIMECONSUMINGTASKV1_HPP_INCLUDED
-#define TIMECONSUMINGTASKV1_HPP_INCLUDED
+#ifndef EVENCOUNTER_HPP_INCLUDED
+#define EVENCOUNTER_HPP_INCLUDED
 
 #include "AnyCounter.hpp"
 
@@ -32,7 +32,7 @@ public:
     /**
      * @brief Returns task type
      */
-    TaskType getTaskType();
+    TaskType getTaskType() const;
 
     /**
      * @brief Counts even numbers
@@ -46,5 +46,4 @@ private:
     unsigned int m_id;
 };
 
-
-#endif /* TIMECONSUMINGTASKV1_HPP_INCLUDED */
+#endif /* EVENCOUNTER_HPP_INCLUDED */

@@ -33,7 +33,7 @@ public:
     /**
      * @brief Returns task type
      */
-    TaskType getTaskType();
+    TaskType getTaskType() const;
 
     /**
      * @brief Counts odd numbers
@@ -47,7 +47,4 @@ private:
     unsigned int m_id;
 };
 
-
 #endif /* ODDCOUNTER_HPP_INCLUDED */
-
-

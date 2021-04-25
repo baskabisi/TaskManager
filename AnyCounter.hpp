@@ -27,7 +27,7 @@ public:
     /**
      * @brief Returns task type
      */
-    virtual TaskType getTaskType() = 0;
+    virtual TaskType getTaskType() const = 0;
 
     /**
      * @brief Implemented in order to execute the counting task in parallel.
@@ -40,6 +40,5 @@ public:
     virtual void count() = 0;
 
 };
-
 
 #endif /* ANYCOUNTER_HPP_INCLUDED */

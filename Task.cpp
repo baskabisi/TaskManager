@@ -66,7 +66,7 @@ Task::resume()
 }
 
 TaskStatus
-Task::getStatus()
+Task::getStatus() const
 {
     return m_status;
 }
@@ -90,7 +90,7 @@ Task::setWorker(std::unique_ptr<AnyWorker> worker)
 }
 
 unsigned int
-Task::getId()
+Task::getId() const
 {
     return m_id;
 }

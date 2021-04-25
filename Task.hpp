@@ -55,7 +55,7 @@ public:
     /**
      * @brief Gets status of task.
      */
-    TaskStatus getStatus();
+    TaskStatus getStatus() const;
 
     /**
      * @brief Sets id of task.
@@ -77,7 +77,7 @@ public:
     /**
      * @brief Gets id of task.
      */
-    unsigned int getId();
+    unsigned int getId() const;
 
 private:
     /**

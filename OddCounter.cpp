@@ -7,6 +7,7 @@
 
 #include "OddCounter.hpp"
 
+#include <thread>
 #include <iostream>
 using namespace std;
 
@@ -24,7 +25,7 @@ OddCounter::operator()()
 }
 
 TaskType
-OddCounter::getTaskType()
+OddCounter::getTaskType() const
 {
     return m_type;
 }

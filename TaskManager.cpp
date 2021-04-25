@@ -21,8 +21,7 @@ const std::string command_resume("resume");
 const std::string command_quit("quit");
 
 TaskManager::TaskManager()
-: m_number_of_tasks(),
-  m_next_task(count_even)
+: m_number_of_tasks()
 {
 }
 
@@ -84,14 +83,7 @@ TaskManager::executeCommand(const std::string& command)
     }
     else if (command.compare(command_status) == 0)
     {
-        cout << endl << "******************************** STATUS ********************************" << endl;
-
-        for (auto& item: m_tasks)
-        {
-            cout << "* Job id: " << item->getId() << " | Job type: " << getType(item->getWorker()->getTaskType()) << " | Status: " << getStatus(item->getStatus()) << endl;
-        }
-
-        cout << "************************************************************************" << endl;
+        status();
     }
     else
     {
@@ -147,32 +139,7 @@ TaskManager::executeCommand(const std::string& command)
 }
 
 const std::string
-TaskManager::getStatus(enum TaskStatus status) const
-{
-    const std::string status_idle("Idle");
-    const std::string status_running("Running");
-    const std::string status_paused("Paused");
-    const std::string status_aborted("Aborted");
-    const std::string status_unknown("Unknown");
-
-    switch (status)
-    {
-        case TaskStatus::RUNNING:
-            return status_running;
-        case TaskStatus::PAUSED:
-            return status_paused;
-        case TaskStatus::ABORTED:
-            return status_aborted;
-        case TaskStatus::IDLE:
-            return status_idle;
-        case TaskStatus::UNKNOWN:
-        default:
-            return status_unknown;
-    }
-}
-
-const std::string
-TaskManager::getType(enum TaskType type) const
+TaskManager::taskTypeToString(enum TaskType type) const
 {
     const std::string even_counter("Even Counter");
     const std::string odd_counter("Odd Counter");
@@ -202,6 +169,19 @@ TaskManager::checkCommand(const std::string command) const
     }
 
     return valid_command;
+}
+
+void
+TaskManager::status() const
+{
+    cout << endl << "******************************** STATUS ********************************" << endl;
+
+    for (auto& item: m_tasks)
+    {
+        cout << "* Job id: " << item->getId() << " | Job type: " << taskTypeToString(item->getWorker()->getTaskType()) << " | Status: " << taskStatusToString(item->getStatus()) << endl;
+    }
+
+    cout << "************************************************************************" << endl;
 }
 
 bool

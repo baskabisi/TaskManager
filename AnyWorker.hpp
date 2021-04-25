@@ -9,10 +9,6 @@
 #define ANYWORKER_HPP_INCLUDED
 
 
-#include <iostream>
-#include <thread>
-#include <functional>
-
 using namespace std;
 
 enum TaskType
@@ -38,13 +34,12 @@ public:
     /**
      * @brief Returns task type
      */
-    virtual TaskType getTaskType() = 0;
+    virtual TaskType getTaskType() const = 0;
 
     /**
      * @brief To be implemented by derived classes in order to be executed.
      */
     virtual void execute() = 0;
 };
-
 
 #endif /* ANYWORKER_HPP_INCLUDED */

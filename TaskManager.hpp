@@ -13,12 +13,8 @@
 #include "TaskStatus.hpp"
 
 #include <iostream>
-#include <cstdlib>
-#include <thread>
 #include <vector>
-#include <map>
 #include <memory>
-#include <functional>
 
 
 using namespace std;
@@ -74,11 +70,10 @@ private:
     TaskManager(TaskManager const &) = delete;
     TaskManager& operator =(const TaskManager&) = delete;
 
-    //enum taskType getNextTaskVersion();
-    const std::string getStatus(enum TaskStatus status) const;
-    const std::string getType(enum TaskType type) const;
+    const std::string taskTypeToString(enum TaskType type) const;
 
     // Commands
+    void status() const;
     bool startTask(unsigned int id);
     bool abortTask(unsigned int id);
     bool pauseTask(unsigned int id);
@@ -88,9 +83,6 @@ private:
     unsigned int m_number_of_tasks;
 
     std::vector<std::unique_ptr<Task>> m_tasks;
-
-    enum TaskType m_next_task;
 };
-
 
 #endif /* TASKMANAGER_HPP_INCLUDED */

@@ -8,7 +8,7 @@
 #ifndef TASKSTATUS_HPP_INCLUDED
 #define TASKSTATUS_HPP_INCLUDED
 
-#include <string>
+
 #include <iostream>
 
 enum class TaskStatus
@@ -29,21 +29,29 @@ enum class TaskStatus
  * This function converts TaskStatus to a string.
  *
  */
-inline std::string
-taskStatusToString(TaskStatus state)
+inline const std::string
+taskStatusToString(TaskStatus status)
 {
-    switch (state)
+    const std::string status_idle("Idle");
+    const std::string status_running("Running");
+    const std::string status_paused("Paused");
+    const std::string status_aborted("Aborted");
+    const std::string status_unknown("Unknown");
+
+    switch (status)
     {
-        case TaskStatus::IDLE:
-            return "IDLE";
         case TaskStatus::RUNNING:
-            return "RUNNING";
+            return status_running;
         case TaskStatus::PAUSED:
-            return "PAUSED";
+            return status_paused;
         case TaskStatus::ABORTED:
-            return "ABORTED";
+            return status_aborted;
+        case TaskStatus::IDLE:
+            return status_idle;
+        case TaskStatus::UNKNOWN:
+        default:
+            return status_unknown;
     }
-    return "UNKNOWN";
 }
 
 #endif /* TASKSTATUS_HPP_INCLUDED */

@@ -7,6 +7,7 @@
 
 #include "EvenCounter.hpp"
 
+#include <thread>
 #include <iostream>
 using namespace std;
 
@@ -24,7 +25,7 @@ EvenCounter::operator()()
 }
 
 TaskType
-EvenCounter::getTaskType()
+EvenCounter::getTaskType() const
 {
     return m_type;
 }

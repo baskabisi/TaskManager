@@ -2,8 +2,6 @@
 #include "TaskManager.hpp"
 
 #include <iostream>
-#include <cstdlib>
-#include <thread>
 
 using namespace std;
 
