@@ -25,6 +25,11 @@ public:
     virtual void operator()(){count();};
 
     /**
+     * @brief Returns task type
+     */
+    virtual TaskType getTaskType() = 0;
+
+    /**
      * @brief Implemented in order to execute the counting task in parallel.
      */
     void execute(){count();};

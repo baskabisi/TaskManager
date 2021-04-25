@@ -30,12 +30,18 @@ public:
     void operator()();
 
     /**
+     * @brief Returns task type
+     */
+    TaskType getTaskType();
+
+    /**
      * @brief Counts even numbers
      */
     void count();
 
 private:
 
+    TaskType m_type;
     long long m_current_number;
     unsigned int m_id;
 };

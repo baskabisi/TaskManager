@@ -12,7 +12,8 @@ using namespace std;
 
 OddCounter::OddCounter(unsigned int id)
 : m_current_number(1),
-  m_id(id)
+  m_id(id),
+  m_type(count_odd)
 {
 }
 
@@ -20,6 +21,12 @@ void
 OddCounter::operator()()
 {
     count();
+}
+
+TaskType
+OddCounter::getTaskType()
+{
+    return m_type;
 }
 
 void

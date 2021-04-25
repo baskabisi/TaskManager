@@ -12,7 +12,8 @@ using namespace std;
 
 EvenCounter::EvenCounter(unsigned int id)
 : m_current_number(0),
-  m_id(id)
+  m_id(id),
+  m_type(count_even)
 {
 }
 
@@ -20,6 +21,12 @@ void
 EvenCounter::operator()()
 {
     count();
+}
+
+TaskType
+EvenCounter::getTaskType()
+{
+    return m_type;
 }
 
 void

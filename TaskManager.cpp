@@ -56,6 +56,18 @@ TaskManager::registerTasks()
     {
         auto ret = std::make_unique<Task>(i);
         m_tasks.push_back(std::move(ret));
+
+        // There could be a factory creating workers
+        std::unique_ptr<AnyWorker> worker;
+        if (i % 2 == 0)
+        {
+            worker = std::make_unique<EvenCounter>(i);
+        }
+        else
+        {
+            worker = std::make_unique<OddCounter>(i);
+        }
+        m_tasks[i]->setWorker(std::move(worker));
     }
 
     return false;
@@ -76,7 +88,7 @@ TaskManager::executeCommand(const std::string& command)
 
         for (auto& item: m_tasks)
         {
-            cout << "* Job id: " << item->id() << " | Job type: " << getType(item->type()) << " | Status: " << getStatus(item->status()) << endl;
+            cout << "* Job id: " << item->getId() << " | Job type: " << getType(item->getWorker()->getTaskType()) << " | Status: " << getStatus(item->getStatus()) << endl;
         }
 
         cout << "************************************************************************" << endl;
@@ -196,7 +208,7 @@ bool
 TaskManager::startTask(unsigned int id)
 {
     if ((m_tasks.size() > id) &&
-        (m_tasks[id]->status() == TaskStatus::IDLE))
+        (m_tasks[id]->getStatus() == TaskStatus::IDLE))
     {
         m_tasks[id]->start();
     }
@@ -212,7 +224,7 @@ bool
 TaskManager::abortTask(unsigned int id)
 {
     if ((m_tasks.size() > id) &&
-        (m_tasks[id]->status() != TaskStatus::ABORTED))
+        (m_tasks[id]->getStatus() != TaskStatus::ABORTED))
     {
         m_tasks[id]->abort();
     }
@@ -228,7 +240,7 @@ bool
 TaskManager::pauseTask(unsigned int id)
 {
     if ((m_tasks.size() > id) &&
-        (m_tasks[id]->status() == TaskStatus::RUNNING))
+        (m_tasks[id]->getStatus() == TaskStatus::RUNNING))
     {
         m_tasks[id]->pause();
     }
@@ -244,7 +256,7 @@ bool
 TaskManager::resumeTask(unsigned int id)
 {
     if ((m_tasks.size() > id) &&
-        (m_tasks[id]->status() == TaskStatus::PAUSED))
+        (m_tasks[id]->getStatus() == TaskStatus::PAUSED))
     {
         m_tasks[id]->resume();
     }

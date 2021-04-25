@@ -15,6 +15,12 @@
 
 using namespace std;
 
+enum TaskType
+{
+    count_even,
+    count_odd
+};
+
 class AnyWorker
 {
 public:
@@ -28,6 +34,11 @@ public:
      * @brief To be implemented by derived classes in order to execute the tasks in parallel.
      */
     virtual void operator()() = 0;
+
+    /**
+     * @brief Returns task type
+     */
+    virtual TaskType getTaskType() = 0;
 
     /**
      * @brief To be implemented by derived classes in order to be executed.

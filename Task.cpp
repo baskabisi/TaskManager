@@ -12,19 +12,8 @@
 
 Task::Task(unsigned int id)
 : m_status(TaskStatus::IDLE),
-  m_id(id),
-  m_type(count_even)
+  m_id(id)
 {
-    if (m_id % 2 == 0)
-    {
-        m_worker = std::make_unique<EvenCounter>(m_id);
-        m_type = count_even;
-    }
-    else
-    {
-        m_worker = std::make_unique<OddCounter>(m_id);
-        m_type = count_odd;
-    }
 }
 
 Task::~Task()
@@ -64,7 +53,6 @@ Task::pause()
     {
         m_status = TaskStatus::PAUSED;
     }
-    cout << "Job #" << m_id << " aborted." <<  endl;
 }
 
 void
@@ -78,19 +66,31 @@ Task::resume()
 }
 
 TaskStatus
-Task::status()
+Task::getStatus()
 {
     return m_status;
 }
 
-TaskType
-Task::type()
+void
+Task::setStatus(TaskStatus status)
 {
-    return m_type;
+    m_status = status;
+}
+
+std::unique_ptr<AnyWorker>
+Task::getWorker()
+{
+    return std::move(m_worker);
+}
+
+void
+Task::setWorker(std::unique_ptr<AnyWorker> worker)
+{
+    m_worker = std::move(worker);
 }
 
 unsigned int
-Task::id()
+Task::getId()
 {
     return m_id;
 }
