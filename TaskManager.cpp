@@ -178,7 +178,7 @@ TaskManager::status() const
 
     for (auto& item: m_tasks)
     {
-        cout << "* Job id: " << item->getId() << " | Job type: " << taskTypeToString(item->getWorker()->getTaskType()) << " | Status: " << taskStatusToString(item->getStatus()) << endl;
+        cout << "* Job id: " << item->getId() << " | Job type: " << taskTypeToString(item->getTaskType()) << " | Status: " << taskStatusToString(item->getStatus()) << endl;
     }
 
     cout << "************************************************************************" << endl;

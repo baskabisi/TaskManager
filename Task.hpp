@@ -64,9 +64,9 @@ public:
     void setStatus(TaskStatus status);
 
     /**
-     * @brief Gets the worker to execute the task.
+     * @brief Gets the type of the task
      */
-    std::unique_ptr<AnyWorker> getWorker();
+    TaskType getTaskType() const;
 
     /**
      * @brief Sets the worker to execute the task.

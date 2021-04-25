@@ -77,10 +77,10 @@ Task::setStatus(TaskStatus status)
     m_status = status;
 }
 
-std::unique_ptr<AnyWorker>
-Task::getWorker()
+TaskType
+Task::getTaskType() const
 {
-    return std::move(m_worker);
+    return m_worker->getTaskType();
 }
 
 void

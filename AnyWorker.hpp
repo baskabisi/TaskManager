@@ -14,7 +14,8 @@ using namespace std;
 enum TaskType
 {
     count_even,
-    count_odd
+    count_odd,
+    task_type_unknown
 };
 
 class AnyWorker
